@@ -1,4 +1,4 @@
-package VSUET;
+package ru.vsuet.course1;
 
 public class ex1 {
 
@@ -22,7 +22,7 @@ public class ex1 {
             System.out.println();
         }
 
-        //Transponse matrix
+        //Transponsed matrix
         for (int i = 0; i < n; i++) {
             for (int j = i+1; j < n; j++) {
                 int temp = a[i][j];
@@ -33,7 +33,7 @@ public class ex1 {
 
         //Output the transponsed matrix
         System.out.println();
-        System.out.println("Trasnsponsed matrix");
+        System.out.println("Transponsed matrix");
         System.out.println("------");
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {

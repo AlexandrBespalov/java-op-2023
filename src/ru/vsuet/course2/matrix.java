@@ -1,7 +1,7 @@
-package VSUET;
+package ru.vsuet.course2;
 
-public class Matrix {
+public class matrix {
     public static void main(String[] args) {
-        
+
     }
 }
