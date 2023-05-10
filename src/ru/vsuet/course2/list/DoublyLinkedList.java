@@ -1,6 +1,6 @@
 package ru.vsuet.course2.list;
 
-public class DoublyLinkedList<T> {
+public class  DoublyLinkedList<T> {
     private Node<T> head;
     private Node<T> tail;
     private int size;

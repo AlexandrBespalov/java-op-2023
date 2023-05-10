@@ -1,5 +1,7 @@
 package ru.vsuet.course2.hashTable;
 
+import java.util.NoSuchElementException;
+
 public class HashTable<T> {
     private final int INITIAL_CAPACITY = 16;
     private final double LOAD_FACTOR = 0.75;
@@ -82,7 +84,7 @@ public class HashTable<T> {
             }
             curr = curr.next;
         }
-        return null;
+        throw new NoSuchElementException("Key not found");
     }
 
     private static class ListNode<T> {
