@@ -1,4 +1,4 @@
-package ru.vsuet.course3.List;
+package ru.vsuet.course3.ListSA;
 
 // Пример использования
 public class Main {

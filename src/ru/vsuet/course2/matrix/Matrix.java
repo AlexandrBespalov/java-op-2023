@@ -1,15 +1,42 @@
 package ru.vsuet.course2.matrix;
 
+import java.util.Arrays;
 import java.util.Random;
+import java.util.function.BiFunction;
 
 public class Matrix {
     private int[][] matrix;
 
-    public Matrix() {
-        matrix = new int[5][5];
+    public Matrix(int size) {
+        matrix = new int[size][size];
+        fillRandom();
     }
 
-    public void fillRandom() {
+    public int calculate(
+            BiFunction<Integer, Integer, Boolean> condition,
+            BiFunction<Integer, Integer, Integer> expression,
+            Integer accumulator
+    ) {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (condition.apply(i, j)) {
+                    accumulator = expression.apply(accumulator, matrix[i][j]);
+                }
+            }
+        }
+        return accumulator;
+    }
+
+
+    @Override
+    public String toString() {
+        return Arrays.deepToString(matrix)
+                .replace("[[", "[")
+                .replace("], ", "]\n")
+                .replace("]]", "]");
+    }
+
+    private void fillRandom() {
         Random random = new Random();
         for (int i = 0; i < matrix.length; i++) {
             for (int j = 0; j < matrix[i].length; j++) {
