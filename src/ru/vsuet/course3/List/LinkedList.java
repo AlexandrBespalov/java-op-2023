@@ -9,7 +9,7 @@ class LinkedList {
         this.head = null;
     }
 
-    // Метод для добавления элемента в конец списка
+    // Метод для добавления элемента в конец списка (1)
     public void append(int data) {
         Node newNode = new Node(data);
 
