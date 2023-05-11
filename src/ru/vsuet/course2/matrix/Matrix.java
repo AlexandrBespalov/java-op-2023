@@ -1,38 +1,51 @@
 package ru.vsuet.course2.matrix;
 
+import java.util.Random;
+
 public class Matrix {
     private int[][] matrix;
 
-    // Конструктор для создания матрицы размером 5x5
-    public Matrix(int[][] matrix) {
-        if (matrix.length == 5 && matrix[0].length == 5) {
-            this.matrix = matrix;
-        } else {
-            throw new IllegalArgumentException("Матрица должна быть размером 5x5");
+    public Matrix() {
+        matrix = new int[5][5];
+    }
+
+    public void fillRandom() {
+        Random random = new Random();
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                matrix[i][j] = random.nextInt(10);
+            }
         }
     }
 
-    public int sumAboveDiagonal() {
-        int sum = 0;
-
-        for (int i = 0; i < matrix.length - 1; i++) {
-            for (int j = i + 1; j < matrix[i].length; j++) {
-                sum += matrix[i][j];
+    public void printMatrix() {
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                System.out.print(matrix[i][j] + " ");
             }
+            System.out.println();
         }
-
-        return sum;
     }
 
-    public int differenceBelowDiagonal() {
-        int difference = 0;
+    public void performOperations(Calculator calculator) {
+        int sumAboveDiagonal = 0;
+        int differenceBelowDiagonal = 0;
+        int productOnDiagonal = 1;
 
-        for (int i = 1; i < matrix.length; i++) {
-            for (int j = 0; j < i; j++) {
-                difference -= matrix[i][j];
+        for (int i = 0; i < matrix.length; i++) {
+            for (int j = 0; j < matrix[i].length; j++) {
+                if (i < j) {
+                    sumAboveDiagonal = calculator.calculateSum(sumAboveDiagonal, matrix[i][j]);
+                } else if (i > j) {
+                    differenceBelowDiagonal = calculator.calculateDifference(differenceBelowDiagonal, matrix[i][j]);
+                } else {
+                    productOnDiagonal = calculator.calculateProduct(productOnDiagonal, matrix[i][j]);
+                }
             }
         }
 
-        return difference;
+        System.out.println("Сумма элементов выше главной диагонали: " + sumAboveDiagonal);
+        System.out.println("Разность элементов ниже главной диагонали: " + differenceBelowDiagonal);
+        System.out.println("Произведение элементов на главной диагонали: " + productOnDiagonal);
     }
 }
