@@ -1,25 +1,33 @@
 package ru.vsuet.course1.cp4;
 
 import java.util.List;
-
+import java.util.Scanner;
 
 public class Main {
-    //TODO
     public static void main(String[] args) {
-        // Пример вычисления уравнения и сохранения его в файл
-        String equationString = "7 + 3 * Math.abs(Math.pow((-2), 3) - 4) % 23 / 2";
-        double result = Calculator.calculate(equationString);
+        Calculator calculator = new Calculator();
+        HistoryManager historyManager = new HistoryManager();
+        Scanner scanner = new Scanner(System.in);
 
-        Equation equation = new Equation(equationString, result);
-        FileHandler.saveEquation(equation);
+        while (true) {
+            System.out.print("Введите математическое выражение (или 'выход' для завершения): ");
+            String input = scanner.nextLine();
 
-        // Пример загрузки ранее посчитанных уравнений из файла
-        List<Equation> equations = FileHandler.loadEquations();
+            if (input.equalsIgnoreCase("выход")) {
+                break;
+            }
 
-        // Вывод истории уравнений
-        System.out.println("История ранее посчитанных уравнений:");
-        for (Equation eq : equations) {
-            System.out.println(eq.getEquation() + " = " + eq.getResult());
+            double result = calculator.evaluateExpression(input);
+            System.out.println("Результат: " + result);
+
+            historyManager.saveExpression(input, result);
+        }
+
+        List<String> history = historyManager.loadHistory();
+        System.out.println("История вычислений:");
+        for (String entry : history) {
+            System.out.println(entry);
         }
     }
 }
+
