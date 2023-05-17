@@ -1,140 +1,145 @@
 package ru.vsuet.course2.LinkedListApp;
 
-public class LinkedList<T> {
-    private Node<T> head; // Голова списка
+import java.util.function.Predicate;
 
-    /**
-     * Метод для добавления элемента в конец списка.
-     *
-     * @param data данные элемента
-     */
-    public void add(T data) {
-        Node<T> newNode = new Node<>(data); // Создание нового узла с переданными данными
+public class LinkedList implements List {
+    private Node head; // Головной узел списка
 
-        if (head == null) { // Если список пустой, новый узел становится головой списка
-            head = newNode;
+    private class Node {
+        int value; // Значение узла
+        Node next; // Ссылка на следующий узел
+
+        Node(int value) {
+            this.value = value;
+        }
+    }
+
+    @Override
+    public void add(int value) {
+        if (head == null) {
+            head = new Node(value); // Если список пуст, создаем новый узел и делаем его головным
         } else {
-            Node<T> current = head;
-
-            // Перебор списка до последнего элемента
-            while (current.getNext() != null) {
-                current = current.getNext();
+            Node current = head;
+            while (current.next != null) {
+                current = current.next;
             }
-
-            // Добавление нового узла в конец списка
-            current.setNext(newNode);
+            current.next = new Node(value); // Ищем последний узел и добавляем новый узел после него
         }
     }
 
-    /**
-     * Метод для удаления первого вхождения элемента из списка.
-     *
-     * @param data данные элемента
-     * @return true, если элемент был найден и удален, false в противном случае
-     */
-    public boolean remove(T data) {
-        if (head == null) { // Если список пустой, возвращается false
-            return false;
+    @Override
+    public void add(int index, int value) {
+        if (index < 0) {
+            throw new IndexOutOfBoundsException("Индекс не может быть отрицательным");
         }
 
-        if (head.getData().equals(data)) { // Если элемент является головой списка, голова переносится на следующий элемент
-            head = head.getNext();
-            return true;
-        }
-
-        Node<T> current = head;
-
-        // Перебор списка для поиска элемента
-        while (current.getNext() != null) {
-            if (current.getNext().getData().equals(data)) {
-                // Установка ссылки на следующий элемент, пропуская таким образом удаляемый элемент
-                current.setNext(current.getNext().getNext());
-                return true;
+        if (index == 0) {
+            Node newNode = new Node(value);
+            newNode.next = head;
+            head = newNode; // Вставляем новый узел в начало списка и делаем его головным
+        } else {
+            Node current = head;
+            for (int i = 0; i < index - 1; i++) {
+                if (current == null) {
+                    throw new IndexOutOfBoundsException("Индекс выходит за пределы");
+                }
+                current = current.next;
             }
-            current = current.getNext();
-        }
 
-        return false; // Элемент не был найден в списке
+            if (current == null) {
+                throw new IndexOutOfBoundsException("Индекс выходит за пределы");
+            }
+
+            Node newNode = new Node(value);
+            newNode.next = current.next;
+            current.next = newNode; // Вставляем новый узел между текущим и следующим узлом
+        }
     }
 
-    /**
-     * Метод для проверки наличия элемента в списке.
-     *
-     * @param data данные элемента
-     * @return true, если элемент найден в списке, false в противном случае
-     */
-    public boolean contains(T data) {
-        Node<T> current = head;
+    @Override
+    public void remove(int index) {
+        if (index < 0 || head == null) {
+            throw new IndexOutOfBoundsException("Индекс выходит за пределы");
+        }
 
-        // Перебор списка для поиска элемента
+        if (index == 0) {
+            head = head.next; // Удаляем головной узел и делаем следующий узел новым головным
+        } else {
+            Node current = head;
+            for (int i = 0; i < index - 1; i++) {
+                if (current == null || current.next == null) {
+                    throw new IndexOutOfBoundsException("Индекс выходит за пределы");
+                }
+                current = current.next;
+            }
+
+            if (current.next == null) {
+                throw new IndexOutOfBoundsException("Индекс выходит за пределы");
+            }
+
+            current.next = current.next.next; // Удаляем узел, перенаправляя ссылку на следующий узел
+        }
+    }
+
+    @Override
+    public void remove(Predicate<Integer> condition) {
+        if (head == null) {
+            return; // Если список пуст, ничего не делаем
+        }
+
+        Node current = head;
+        Node prev = null;
+
         while (current != null) {
-            if (current.getData().equals(data)) {
-                return true; // Элемент найден в списке
+            if (condition.test(current.value)) {
+                if (prev == null) {
+                    head = current.next; // Удаляем головной узел
+                } else {
+                    prev.next = current.next; // Удаляем текущий узел путем перенаправления ссылки предыдущего узла
+                }
+            } else {
+                prev = current; // Переходим к следующему узлу
             }
-            current = current.getNext();
+            current = current.next;
         }
-
-        return false; // Элемент не найден в списке
     }
 
-    /**
-     * Метод для вывода содержимого списка.
-     */
-    public void printList() {
-        Node<T> current = head;
+    @Override
+    public int get(int index) {
+        if (index < 0 || head == null) {
+            throw new IndexOutOfBoundsException("Индекс выходит за пределы");
+        }
 
-        // Перебор списка и вывод элементов
+        Node current = head;
+        for (int i = 0; i < index; i++) {
+            if (current == null) {
+                throw new IndexOutOfBoundsException("Индекс выходит за пределы");
+            }
+            current = current.next;
+        }
+
+        if (current == null) {
+            throw new IndexOutOfBoundsException("Индекс выходит за пределы");
+        }
+
+        return current.value; // Возвращаем значение текущего узла
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("ILinkedList{");
+
+        Node current = head;
         while (current != null) {
-            System.out.print(current.getData() + " ");
-            current = current.getNext();
+            sb.append(current.value);
+            if (current.next != null) {
+                sb.append(" -> ");
+            }
+            current = current.next;
         }
 
-        System.out.println();
-    }
-
-    /**
-     * Вложенный класс, представляющий узел списка.
-     *
-     * @param <T> тип данных элемента
-     */
-    private static class Node<T> {
-        private T data; // Данные элемента
-        private Node<T> next; // Ссылка на следующий узел
-
-        /**
-         * Конструктор класса Node.
-         *
-         * @param data данные элемента
-         */
-        public Node(T data) {
-            this.data = data;
-        }
-
-        /**
-         * Метод для получения данных элемента.
-         *
-         * @return данные элемента
-         */
-        public T getData() {
-            return data;
-        }
-
-        /**
-         * Метод для получения ссылки на следующий узел.
-         *
-         * @return ссылка на следующий узел
-         */
-        public Node<T> getNext() {
-            return next;
-        }
-
-        /**
-         * Метод для установки ссылки на следующий узел.
-         *
-         * @param next ссылка на следующий узел
-         */
-        public void setNext(Node<T> next) {
-            this.next = next;
-        }
+        sb.append("}");
+        return sb.toString();
     }
 }
