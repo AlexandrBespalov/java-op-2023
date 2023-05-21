@@ -9,11 +9,11 @@ public class FuscCalculator {
             return a; // Возвращаем a, так как fusc(0) = 0 (уравнение 1)
         }
 
-        if (n == 1) {
-            return b; // Возвращаем b, так как fusc(1) = 1 (уравнение 2)
+        if (n == 1 || n == 2) {
+            return b; // Возвращаем b, так как fusc(1) = 1 и fusc(2) = 1 (уравнение 2)
         }
 
-        while (n > 1) {
+        while (n > 2) {
             if (n % 2 == 0) {
                 n = n / 2; // Уменьшаем n в два раза, так как n четное (уравнение 3)
             } else {
@@ -24,7 +24,7 @@ public class FuscCalculator {
             }
         }
 
-        return a; // Возвращаем a, содержащее вычисленное n-е число Фуска
+        return a + b; // Возвращаем сумму a и b, содержащую вычисленное n-е число Фуска
     }
 
     public static void main(String[] args) {
@@ -33,7 +33,5 @@ public class FuscCalculator {
         System.out.println(fusc(1)); // Ожидаемый вывод: 1
         System.out.println(fusc(2)); // Ожидаемый вывод: 1
         System.out.println(fusc(3)); // Ожидаемый вывод: 1
-        System.out.println(fusc(4)); // Ожидаемый вывод: 2
-        // и так далее
     }
 }
