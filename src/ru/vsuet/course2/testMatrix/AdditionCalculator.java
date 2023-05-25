@@ -1,6 +1,6 @@
-package ru.vsuet.course2.matrix;
+package ru.vsuet.course2.testMatrix;
 
-public class MultiplicationCalculator implements Calculator {
+public class AdditionCalculator implements Calculator {
     @Override
     public int calculateSum(int a, int b) {
         return a + b;

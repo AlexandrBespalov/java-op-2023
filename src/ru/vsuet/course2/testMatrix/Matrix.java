@@ -1,4 +1,4 @@
-package ru.vsuet.course2.matrix;
+package ru.vsuet.course2.testMatrix;
 
 import java.util.Arrays;
 import java.util.Random;

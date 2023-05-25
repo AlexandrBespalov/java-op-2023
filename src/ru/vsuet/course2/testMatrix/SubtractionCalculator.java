@@ -1,4 +1,4 @@
-package ru.vsuet.course2.matrix;
+package ru.vsuet.course2.testMatrix;
 
 public class SubtractionCalculator implements Calculator {
     @Override

@@ -5,7 +5,7 @@ import java.util.function.Predicate;
 public class LinkedList implements List {
     private Node head; // Головной узел списка
 
-    private class Node {
+    private static class Node {
         int value; // Значение узла
         Node next; // Ссылка на следующий узел
 

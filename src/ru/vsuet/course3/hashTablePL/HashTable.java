@@ -1,25 +1,26 @@
 package ru.vsuet.course3.hashTablePL;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+import java.util.List;
 
 public class HashTable<K, V> {
     private static final int DEFAULT_SIZE = 16;
 
-    private LinkedList<Entry<K, V>>[] table;  // Массив связных списков для хранения элементов хеш-таблицы
+    private List<Entry<K, V>>[] table;  // Массив списков для хранения элементов хеш-таблицы
     private int size;  // Текущий размер хеш-таблицы
 
     public HashTable() {
-        table = new LinkedList[DEFAULT_SIZE];  // Инициализация массива связных списков
+        table = new List[DEFAULT_SIZE];  // Инициализация массива списков
         size = 0;  // Изначально хеш-таблица пуста
     }
 
     public void put(K key, V value) {
         int index = getIndex(key);  // Получение индекса в массиве для указанного ключа
-        LinkedList<Entry<K, V>> bucket = table[index];  // Получение связного списка для данного индекса
+        List<Entry<K, V>> bucket = table[index];  // Получение списка для данного индекса
 
         if (bucket == null) {
-            bucket = new LinkedList<>();  // Если связного списка нет, создаем новый
-            table[index] = bucket;  // Сохраняем связный список в массиве
+            bucket = new ArrayList<>();  // Если списка нет, создаем новый
+            table[index] = bucket;  // Сохраняем список в массиве
         }
 
         for (Entry<K, V> entry : bucket) {
@@ -29,13 +30,13 @@ public class HashTable<K, V> {
             }
         }
 
-        bucket.add(new Entry<>(key, value));  // Добавляем новый элемент в связный список
+        bucket.add(new Entry<>(key, value));  // Добавляем новый элемент в список
         size++;  // Увеличиваем размер хеш-таблицы
     }
 
     public V get(K key) {
         int index = getIndex(key);  // Получение индекса в массиве для указанного ключа
-        LinkedList<Entry<K, V>> bucket = table[index];  // Получение связного списка для данного индекса
+        List<Entry<K, V>> bucket = table[index];  // Получение списка для данного индекса
 
         if (bucket != null) {
             for (Entry<K, V> entry : bucket) {
@@ -50,12 +51,12 @@ public class HashTable<K, V> {
 
     public void remove(K key) {
         int index = getIndex(key);  // Получение индекса в массиве для указанного ключа
-        LinkedList<Entry<K, V>> bucket = table[index];  // Получение связного списка для данного индекса
+        List<Entry<K, V>> bucket = table[index];  // Получение списка для данного индекса
 
         if (bucket != null) {
             for (Entry<K, V> entry : bucket) {
                 if (entry.getKey().equals(key)) {
-                    bucket.remove(entry);  // Удаляем элемент с указанным ключом из связного списка
+                    bucket.remove(entry);  // Удаляем элемент с указанным ключом из списка
                     size--;  // Уменьшаем размер хеш-таблицы
                     return;
                 }
@@ -65,7 +66,7 @@ public class HashTable<K, V> {
 
     public boolean containsKey(K key) {
         int index = getIndex(key);  // Получение индекса в массиве для указанного ключа
-        LinkedList<Entry<K, V>> bucket = table[index];  // Получение связного списка для данного индекса
+        List<Entry<K, V>> bucket = table[index];  // Получение списка для данного индекса
 
         if (bucket != null) {
             for (Entry<K, V> entry : bucket) {

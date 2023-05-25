@@ -1,7 +1,6 @@
-package ru.vsuet.course2.matrix;
+package ru.vsuet.course2.testMatrix;
 
 import java.util.Objects;
-import java.util.function.BiFunction;
 
 public class Main {
     public static void main(String[] args) {

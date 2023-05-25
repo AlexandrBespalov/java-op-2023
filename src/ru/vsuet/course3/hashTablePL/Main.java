@@ -12,6 +12,7 @@ public class Main {
         table.put("дыня", 40);
         table.put("ежевика", 50);
         table.put("финик", 60);
+        table.put("авокадо", 90);
 
         // Вывод размера хеш-таблицы
         System.out.println("Размер хеш-таблицы: " + table.size());
@@ -29,6 +30,6 @@ public class Main {
 
         // Добавление нового элемента
         table.put("виноград", 70);
-        System.out.println("Значение для 'виноград': " + table.get("виноград"));
+        System.out.println("Значение для 'авокадо': " + table.get("авокадо"));
     }
 }
