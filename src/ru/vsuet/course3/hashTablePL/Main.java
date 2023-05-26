@@ -12,7 +12,6 @@ public class Main {
         table.put("дыня", 40);
         table.put("ежевика", 50);
         table.put("финик", 60);
-        table.put("авокадо", 90);
 
         // Вывод размера хеш-таблицы
         System.out.println("Размер хеш-таблицы: " + table.size());
