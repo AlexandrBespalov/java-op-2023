@@ -1,4 +1,4 @@
-package ru.vsuet.course2.matrix2;
+package ru.vsuet.course2.matrix;
 
 public interface Calculator {
     int calculateSum(int a, int b);
