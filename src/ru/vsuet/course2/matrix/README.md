@@ -63,9 +63,7 @@
 
 ### Метод performOperations
 
-#### "void performOperations(C
-
-alculator calculator)"
+#### "void performOperations(Calculator calculator)"
 
 - Выполняет операции над матрицей с использованием переданного экземпляра "Calculator".
 - Вычисляет сумму элементов выше главной диагонали, разность элементов ниже главной диагонали и произведение элементов на главной диагонали.
