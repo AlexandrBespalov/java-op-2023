@@ -47,30 +47,42 @@
 ### Пример работы программы
 
 ```java
-package ru.vsuet.course2.hashTable;
+package ru.vsuet.course3.hashTableVK;
+
+import java.util.NoSuchElementException;
 
 public class Main {
-    public static void main(String[] args) {
-        HashTable<String> hashTable = new HashTable
+   public static void main(String[] args) {
+      HashTable<String> hashTable = new HashTable<>();
 
-<>();
+      // Добавление элементов
+      hashTable.put("key1");
+      hashTable.put("key2");
+      hashTable.put("key3");
 
-        // Добавление элементов
-        hashTable.put("key1");
-        hashTable.put("key2");
-        hashTable.put("key3");
+      // Получение элемента
+      String value1 = hashTable.get("key1");
+      System.out.println("Значение key1: " + value1);
 
-        // Получение элемента
-        String value1 = hashTable.get("key1");
-        System.out.println("Value for key1: " + value1);
+      // Удаление элемента
+      boolean removed = hashTable.remove("key2");
+      System.out.println("Удаление key2: " + removed);
 
-        // Удаление элемента
-        boolean removed = hashTable.remove("key2");
-        System.out.println("Removed key2: " + removed);
-
-        // Попытка получить удаленный элемент
-        String value2 = hashTable.get("key2");
-        System.out.println("Value for key2: " + value2);
-    }
+      // Попытка получить удаленный элемент
+      try {
+         String value2 = hashTable.get("key2");
+         System.out.println("Значение key2: " + value2);
+      } catch (NoSuchElementException e) {
+         System.out.println(e.getMessage());
+      }
+   }
 }
+```
+
+Вывод программы:
+
+```Java
+Значение key1: key1
+Удаление key2: true
+Такой ключ не найден
 ```

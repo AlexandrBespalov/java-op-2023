@@ -2,102 +2,100 @@ package ru.vsuet.course3.hashTableVK;
 
 import java.util.NoSuchElementException;
 
-public class HashTable<T> {
+public class HashTable<K, V> {
     private final int INITIAL_CAPACITY = 8;
     private final double LOAD_FACTOR = 0.9;
 
-    private Object[] table; // Массив для хранения записей
+    private Entry<K, V>[] table; // Массив для хранения записей
     private int size;
 
     public HashTable() {
-        table = new Object[INITIAL_CAPACITY]; // Создание массива с начальной емкостью
+        table = new Entry[INITIAL_CAPACITY]; // Создание массива с начальной емкостью
         size = 0;
     }
 
     // Хеширование ключа для определения индекса массива
-    private int hash(T key) {
+    private int hash(K key) {
         int hashCode = key.hashCode();
         int index = (hashCode ^ (hashCode >>> 16)) % table.length;
         return index >= 0 ? index : -index;
     }
 
     private void resize() {
-        Object[] newTable = new Object[table.length * 2]; // Создание нового массива с увеличенной емкостью
-        for (Object entry : table) {
+        Entry<K, V>[] newTable = new Entry[table.length * 2]; // Создание нового массива с увеличенной емкостью
+        for (Entry<K, V> entry : table) {
             if (entry != null) {
-                Entry<T> curr = (Entry<T>) entry;
+                Entry<K, V> curr = entry;
                 int index = hash(curr.key);
+                while (newTable[index] != null) {
+                    index = (index + 1) % newTable.length; // Линейное пробирование при коллизии
+                }
                 newTable[index] = new Entry<>(curr.key, curr.value); // Перехеширование и добавление записей в новый массив
             }
         }
         table = newTable; // Замена старого массива новым
     }
 
-    public void put(T key) {
+    public void put(K key, V value) {
         if ((double) size / table.length >= LOAD_FACTOR) {
             resize();
         }
 
         int index = hash(key); // Определение индекса массива
-        Entry<T> curr = (Entry<T>) table[index];
-        while (curr != null) {
-            if (curr.key.equals(key)) {
-                return; // Если ключ уже существует в хеш-таблице, завершаем операцию
+        while (table[index] != null) {
+            if (table[index].key.equals(key)) {
+                table[index].value = value; // Если ключ уже существует в хеш-таблице, обновляем значение
+                return;
             }
-            curr = curr.next;
+            index = (index + 1) % table.length; // Линейное пробирование при коллизии
         }
 
-        Entry<T> newEntry = new Entry<>(key); // Создание новой записи
-        newEntry.next = (Entry<T>) table[index]; // Присоединение новой записи к началу списка
-        table[index] = newEntry; // Обновление ячейки массива
+        table[index] = new Entry<>(key, value); // Создание новой записи
         size++;
     }
 
-    public boolean remove(T key) {
+    public boolean remove(K key) {
         int index = hash(key); // Определение индекса массива
-        Entry<T> curr = (Entry<T>) table[index];
-        if (curr == null) {
-            return false; // Если ячейка пуста, элемент не найден
-        }
-        if (curr.key.equals(key)) {
-            table[index] = curr.next; // Если удаляемая запись первая в списке, обновляем ячейку массива
-            size--;
-            return true;
-        }
-        while (curr.next != null) {
-            if (curr.next.key.equals(key)) {
-                curr.next = curr.next.next; // Удаление записи путем переустановки ссылок
+        while (table[index] != null) {
+            if (table[index].key.equals(key)) {
+                table[index] = null; // Удаление записи
                 size--;
+                rehash(); // Перехеширование оставшихся записей в случае, если они были сдвинуты
                 return true;
             }
-            curr = curr.next;
+            index = (index + 1) % table.length; // Линейное пробирование при коллизии
         }
         return false; // Элемент не найден
     }
 
-    public T get(T key) {
-        int index = hash(key); // Определение индекса массива
-        Entry<T> curr = (Entry<T>) table[index];
-        while (curr != null) {
-            if (curr.key.equals(key)) {
-                return curr.key; // Если найдена запись с искомым ключом, возвращаем ключ
+    private void rehash() {
+        Entry<K, V>[] tempTable = table;
+        table = new Entry[INITIAL_CAPACITY]; // Создание нового массива
+        size = 0;
+        for (Entry<K, V> entry : tempTable) {
+            if (entry != null) {
+                put(entry.key, entry.value); // Перехеширование и добавление записей в новый массив
             }
-            curr = curr.next;
+        }
+    }
+
+    public V get(K key) {
+        int index = hash(key); // Определение индекса массива
+        while (table[index] != null) {
+            if (table[index].key.equals(key)) {
+                return table[index].value; // Если найдена запись с искомым ключом, возвращаем значение
+            }
+            index = (index + 1) % table.length; // Линейное пробирование при коллизии
         }
         throw new NoSuchElementException("Такой ключ не найден"); // Если элемент не найден, генерируем исключение
     }
 
     // Внутренний класс для представления записи в хеш-таблице
-    private static class Entry<T> {
-        T key;
-        T value;
-        Entry<T> next; // Ссылка на следующую запись в случае коллизии
+    private static class Entry<K, V> {
+        K key;
+        V value;
 
-        public Entry(T key) {
-            this.key = key;
-        }
-
-        public Entry(T key, T value) {
+        public Entry(K key, V value) {
             this.key = key;
             this.value = value;
         }
